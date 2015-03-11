@@ -91,6 +91,8 @@ define bind::server::conf (
   $listen_on_v6_addr      = [ '::1' ],
   $forwarders             = [],
   $directory              = '/var/named',
+  $binduser               = $::bind::params::binduser,
+  $bindgroup              = $::bind::params::bindgroup,
   $managed_keys_directory = undef,
   $hostname               = undef,
   $server_id              = undef,
@@ -116,6 +118,8 @@ define bind::server::conf (
 
   # Everything is inside a single template
   file { $title:
+    owner   => $binduser,
+    group   => $bindgroup,
     notify  => Class['bind::service'],
     content => template('bind/named.conf.erb'),
   }
